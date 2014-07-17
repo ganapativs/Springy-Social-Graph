@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #SuggessionTextCanvas{
+            background:url(gpp.png);
+        }
+    </style>
+    <script src="jquery.js"></script>
+    <script src="springy.js"></script>
+    <script src="springyui.js"></script>
+</head>
+<body>
+<script>
+   $(document).ready(function(){
+       $('canvas').animate(2000);
+   });
+    var graph = new Springy.Graph();
+
+   function autoSearch(link){
+       console.log(link);
+       window.open('http://invenzone.com/search?q='+link,'_newtab');
+   }
+
+    var plate = graph.newNode({label: 'Plate',sLink:'Plate in General',
+        ondoubleclick: function() {
+            console.log("Double Click Parent Function:"+this.sLink);
+            autoSearch(this.sLink);
+        }
+    });
+    var gold = graph.newNode({label: 'Gold'});
+    var face = graph.newNode({label: 'Face'});
+    var dish = graph.newNode({label: 'Dish'});
+    var bank = graph.newNode({label: 'Bank'});
+    var flat = graph.newNode({label: 'Flat'});
+    var stone = graph.newNode({label: 'Stone'});
+    var travel = graph.newNode({label: 'Travel'});
+    var climb = graph.newNode({label: 'Climb'});
+    var traveller = graph.newNode({label: 'Traveller'});
+    var action = graph.newNode({label: 'Action'});
+    var fix = graph.newNode({label: 'Fix'});
+    var patch = graph.newNode({label: 'Patch'});
+    var process = graph.newNode({label: 'Process'});
+
+    graph.newEdge(plate, travel, {color: '#F9B514',directional: false});
+    //graph.newEdge(travel, plate, {color: '#F9B514'});
+    graph.newEdge(travel, fix, {color: '#F9B514',directional: false});
+
+    graph.newEdge(plate, face, {color: '#BE9EA1',directional: false});
+    graph.newEdge(plate, dish, {color: '#BE9EA1',directional: false});
+    graph.newEdge(plate, bank, {color: '#BE9EA1',directional: false});
+    graph.newEdge(plate, flat, {color: '#BE9EA1',directional: false});
+    graph.newEdge(plate, stone, {color: '#BE9EA1',directional: false});
+
+    graph.newEdge(travel, climb, {color: '#DEE41F',directional: false});
+    graph.newEdge(travel, traveller, {color: '#DEE41F',directional: false});
+    graph.newEdge(travel, action, {color: '#DEE41F',directional: false});
+
+    graph.newEdge(fix, patch, {color: '#D3A6DD',directional: false});
+    //graph.newEdge(fix, process, {color: '#D3A6DD'});
+
+
+    graph.newEdge(process, fix, {color: '#F33C5F',weight:3,directional: false});
+    graph.newEdge(fix, plate, {color: '#F33C5F',weight:3,directional: false});
+    graph.newEdge(plate, gold, {color: '#F33C5F',weight:3,directional: false});
+
+    jQuery(function(){
+        $('#SuggessionTextCanvas').attr("width", $(".test").innerWidth());
+        $('#SuggessionTextCanvas').attr("height", window.innerHeight);
+        var springy = window.springy = jQuery('#SuggessionTextCanvas').springy({
+            graph: graph,
+            nodeSelected: function(node){
+                console.log('Node selected: ' + JSON.stringify(node.data));
+            }
+        });
+    });
+    $(window).resize(function(){
+        $('#SuggessionTextCanvas').attr("width", $(".test").innerWidth());
+        $('#SuggessionTextCanvas').attr("height",  window.innerHeight);
+    });
+   $(window).bind("load", function() {
+       var canvasElement=document.getElementById('SuggessionTextCanvas');
+       var ctx=canvasElement.getContext('2d');
+       ctx.font="20px Verdana,Sans-serif";
+       ctx.fillStyle="Black";
+       ctx.fillText("Double click the bubble to search for its relation.!",10,100);
+        if($(window).width()<=768){
+            alert($(window).width());
+            ctx.clearRect($(".test").innerWidth(),window.innerHeight);
+            ctx.font="20px Verdana,Sans-serif";
+            ctx.fillText("This feature is not available<br>in your device!",10,100);
+        }
+    });
+</script>
+<div class="test" style="width: 80%;display: inline-block">
+<canvas id="SuggessionTextCanvas" width="640" height="480" >Your Browser Will Not Support HTML5 Canvas.Please Upgrade Browser and Try.Thank You.</canvas>
+</div><div style="width: 20%;display: inline-block">Hello</div>
+</body>
+</html>
